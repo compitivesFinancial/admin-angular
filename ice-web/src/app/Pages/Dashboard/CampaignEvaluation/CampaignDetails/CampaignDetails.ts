@@ -71,7 +71,6 @@ export class CampaignDetails implements OnInit {
             }
           }
     )
-    
    }
 
   ngOnInit() {
@@ -92,7 +91,7 @@ export class CampaignDetails implements OnInit {
       this.max = this.details.campaign.max_investment
       this.min = this.details.campaign.min_investment
       this.close_date = this.details.campaign.close_date
-      
+
       if(this.details.campaign){
         this.campaign_details = Object.entries(this.details.campaign).map(entry => {
           let obj:any={title: entry[0].split("_").join(" "),value:entry[1]};
@@ -103,12 +102,12 @@ export class CampaignDetails implements OnInit {
         });
 
       }
-      
+
     })
   }
 
   add(index){
-    const a=[4,3,2,1]; 
+    const a=[4,3,2,1];
     return a[index];
   }
 
@@ -123,7 +122,7 @@ export class CampaignDetails implements OnInit {
   }
 
   inputdisabled:boolean= false
-  
+
 
   approveRejectKYC(status:string,type?:number){
     if(type && this.details.campaign.approved_status == "1" && this.details.campaign_product.role_type == this.user_data.role_type && !this.product_id && this.details.campaign_product.activity == 1){
@@ -181,7 +180,7 @@ export class CampaignDetails implements OnInit {
   changeTab(data:any){
     this.evaluation_details=data;
     this.graph_data_loaded=false;
-    this.risk_graph_data_loaded=false;    
+    this.risk_graph_data_loaded=false;
     setTimeout(() => {
       if(this.evaluation_details.rank_type == 1){
         setTimeout(() => {
@@ -193,7 +192,7 @@ export class CampaignDetails implements OnInit {
       if(this.evaluation_details.rank_type == 2){
         setTimeout(() => {
           this.loadRiskChart();
-          
+
         }, 100);
         this.risk_graph_data_loaded=true;
         return
@@ -213,9 +212,9 @@ export class CampaignDetails implements OnInit {
   }
 
   loadRadarGraph(id?:string,rank_type?:number){
-    
+
     const {series,categories}=rank_type == 3 ? this.loadRankType() : this.setData();
-    
+
     var options11 = {
       series: series,
       chart: {
@@ -260,7 +259,7 @@ export class CampaignDetails implements OnInit {
         }
       }
     }
-    
+
     };
 
     if(id){
@@ -273,7 +272,7 @@ export class CampaignDetails implements OnInit {
 
     this.radar_chart = new ApexCharts(document.querySelector("#chart1"), options11);
     this.radar_chart.render();
-    
+
   }
 
   loadRiskChart(){
@@ -357,7 +356,7 @@ export class CampaignDetails implements OnInit {
     this.load=true;
     const data={
       "field":this.post_data,
-      "id":this.user_data.id 
+      "id":this.user_data.id
     }
     this.kyc_service.updateCampaignDetails(data).subscribe((res:any)=>{
       this.load=false;
@@ -383,7 +382,6 @@ export class CampaignDetails implements OnInit {
     })
   }
 
-
   errorHandler(){
     this.err=false;
     this.post_data=[];
@@ -400,7 +398,7 @@ export class CampaignDetails implements OnInit {
           this.post_data.push(item_data);
         }
       });
-      
+
     })
   }
 
@@ -450,7 +448,7 @@ export class CampaignDetails implements OnInit {
     $('#borrowers').DataTable().destroy();
     $('#investor').DataTable().destroy();
     if(type == 1){
-      setTimeout(() => {   
+      setTimeout(() => {
         $('#borrowers').DataTable({
           ordering: false,
           responsive: true,
@@ -490,7 +488,7 @@ export class CampaignDetails implements OnInit {
       this.show_add_loan=false;
       this.show_loan_statement=true;
       window.scrollTo(0,0)
-      setTimeout(() => {   
+      setTimeout(() => {
         $('#borrowers').DataTable({
           ordering: false,
           responsive: true,
@@ -535,7 +533,7 @@ export class CampaignDetails implements OnInit {
       this.getStatement();
       if(!type){
         this.toast.warningToastr(res.response.message)
-      }  
+      }
     })
   }
 
@@ -556,7 +554,7 @@ export class CampaignDetails implements OnInit {
         this.data_loaded=true;
         $('#borrowers').DataTable().destroy();
         $('#investor').DataTable().destroy();
-        setTimeout(() => {   
+        setTimeout(() => {
           $('#borrowers').DataTable({
             ordering: false,
             responsive: true,
@@ -573,7 +571,7 @@ export class CampaignDetails implements OnInit {
           });
         // $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
         }, 100);
-       
+
       }
     })
   }
@@ -603,7 +601,7 @@ export class CampaignDetails implements OnInit {
       if(res.status){
         this.productList=res.response;
         this.productListDisplay = true
-       
+
       }
     })
   }
@@ -611,10 +609,10 @@ export class CampaignDetails implements OnInit {
 
   changeDate(){
     let data={
-      'id':this.details.campaign.id,
-     'close_date':this.close_date 
+      "date":this.close_date
     }
-    this.productService.changeDate(data).subscribe((res:any)=>{
+    this.productService.changeDate(data,this.details.campaign.id).subscribe((res:any)=>{
+      //this.toast.successToastr(res.message)
       this.toast.successToastr("Succesfully Changed")
       this.getCampaignDetails()
     })
